@@ -16,7 +16,7 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            app:title="Tambah Baru" />
+            app:title="Gimana Hari Ini?" />
 
     </com.google.android.material.appbar.AppBarLayout>
 
@@ -35,7 +35,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                android:hint="Judul">
+                android:hint="Ada apa nih?">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/title"
@@ -50,7 +50,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                android:hint="Deskripsi">
+                android:hint="Tuliskan Ceritamu!">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/description"
@@ -68,8 +68,9 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="24dp"
                 android:padding="12dp"
-                android:text="Simpan Tugas"
-                android:textSize="16sp" />
+                android:text="Udah ya?"
+                android:textSize="16sp"
+                />
 
         </LinearLayout>
 

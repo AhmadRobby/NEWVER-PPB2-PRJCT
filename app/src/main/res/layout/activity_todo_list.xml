@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#F6F8FB"
+    tools:context=".TodoListActivity">
+
+    <!-- Judul Halaman -->
+    <TextView
+        android:id="@+id/titlePage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Daftar Kegiatan"
+        android:textSize="22sp"
+        android:textStyle="bold"
+        android:textColor="#1E1E1E"
+        android:layout_marginTop="24dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginBottom="8dp" />
+
+    <!-- Garis pembatas -->
+    <View
+        android:id="@+id/divider"
+        android:layout_below="@id/titlePage"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#DADCE0"
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginBottom="8dp" />
+
+    <!-- Daftar Todo -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/container"
+        android:layout_below="@id/divider"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:clipToPadding="false"
+        android:paddingHorizontal="20dp"
+        android:paddingTop="10dp"
+        android:paddingBottom="80dp"
+        tools:listitem="@layout/item_todo" />
+
+    <!-- Loading Progress -->
+    <ProgressBar
+        android:id="@+id/ui_loading"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_centerInParent="true"
+        android:indeterminateTint="#0D6EFD"
+        android:visibility="gone" />
+
+    <!-- Tombol Tambah (Floating Action Button) -->
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/TombolCreateTodo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_margin="24dp"
+        android:contentDescription="Tambah Todo"
+        app:backgroundTint="#0D6EFD"
+        app:tint="@android:color/white"
+        app:fabSize="normal"
+        app:elevation="8dp"
+        app:srcCompat="@android:drawable/ic_input_add" />
+
+</RelativeLayout>

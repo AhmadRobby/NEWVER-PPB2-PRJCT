@@ -62,7 +62,7 @@ class TodoEditActivity : AppCompatActivity() {
 
                 try {
                     todoUseCase.updateTodo(payload)
-                    displayMessage("Data berhasil diperbarui")
+                    displayMessage("Ceritamu berhasil diperbarui")
                     backToList()
                 } catch (exc: Exception) {
                     displayMessage("Gagal memperbarui data: ${exc.message}")

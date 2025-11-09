@@ -62,8 +62,8 @@ class TodoListActivity : AppCompatActivity() {
 
             override fun onDelete(todo: Todo) {
                 val builder = AlertDialog.Builder(this@TodoListActivity)
-                builder.setTitle("Konfirmasi Hapus Data")
-                builder.setMessage("Apakah anda yakin ingin menghapus data ini?")
+                builder.setTitle("Menghapus")
+                builder.setMessage("Apakah kamu yakin ingin menghapus cerita ini?")
 
                 builder.setPositiveButton("Ya") { dialog, _ ->
                     lifecycleScope.launch {
@@ -71,17 +71,17 @@ class TodoListActivity : AppCompatActivity() {
                             todoUseCase.deleteTodo(todo.id)
                             Toast.makeText(
                                 this@TodoListActivity,
-                                "Data berhasil dihapus",
+                                "Cerita berhasil dihapus",
                                 Toast.LENGTH_SHORT
                             ).show()
                             initializeData()
                         } catch (exc: Exception) {
-                            displayMessage("Gagal menghapus data: ${exc.message}")
+                            displayMessage("Gagal menghapus cerita: ${exc.message}")
                         }
                     }
                 }
 
-                builder.setNegativeButton("Tidak") { dialog, _ ->
+                builder.setNegativeButton("Gajadi") { dialog, _ ->
                     dialog.dismiss()
                 }
 

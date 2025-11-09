@@ -50,7 +50,7 @@ class TodoCreateActivity : AppCompatActivity() {
         lifecycleScope.launch {
             todoUseCase.createTodo(todo)
 
-            Toast.makeText(this@TodoCreateActivity, "Data Berhasil Di Tambahkan", Toast.LENGTH_LONG)
+            Toast.makeText(this@TodoCreateActivity, "Tersimpan, Makasih udah cerita ya!", Toast.LENGTH_LONG)
 
             toTodoListActivity()
         }

@@ -6,10 +6,10 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="8dp"
-    android:backgroundTint="#FFFFFF"
+    android:backgroundTint="#6C48C5"
     app:cardCornerRadius="12dp"
     app:cardElevation="4dp"
-    app:strokeColor="#0D6EFD"
+    app:strokeColor="#6C48C5"
     app:strokeWidth="1dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -21,7 +21,7 @@
             android:id="@+id/color_bar"
             android:layout_width="4dp"
             android:layout_height="0dp"
-            android:background="#0D6EFD"
+            android:background="#2E073F"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
@@ -33,7 +33,7 @@
             android:layout_marginStart="12dp"
             android:textSize="18sp"
             android:textStyle="bold"
-            android:textColor="#212121"
+            android:textColor="#F9F8F6"
             app:layout_constraintStart_toEndOf="@id/color_bar"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -46,7 +46,7 @@
             android:layout_marginStart="12dp"
             android:layout_marginTop="4dp"
             android:textSize="14sp"
-            android:textColor="#616161"
+            android:textColor="#B9B4C7"
             app:layout_constraintStart_toEndOf="@id/color_bar"
             app:layout_constraintTop_toBottomOf="@id/title"
             app:layout_constraintEnd_toEndOf="parent"

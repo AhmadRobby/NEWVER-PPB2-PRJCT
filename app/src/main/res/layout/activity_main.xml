@@ -6,7 +6,7 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/bg_gradient"
+    android:background="#000000"
     tools:context=".MainActivity">
 
     <!-- Logo Aplikasi -->
@@ -15,20 +15,20 @@
         android:layout_width="120dp"
         android:layout_height="120dp"
         android:layout_marginTop="100dp"
-        android:src="@drawable/ic_launcher_foreground"
+        android:src="@mipmap/ic_launcher_foreground"
         android:contentDescription="Logo Aplikasi"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:background="@drawable/bg_logo_circle"
-        android:padding="16dp" />
+         />
 
     <!-- Judul -->
     <TextView
         android:id="@+id/tv_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Selamat Datang!"
+        android:text="Welcome!"
         android:textSize="30sp"
         android:textStyle="bold"
         android:textColor="@android:color/white"
@@ -42,7 +42,7 @@
         android:id="@+id/tv_subtitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Masuk dengan akun Google Anda untuk melanjutkan"
+        android:text="Ceritakan curhatanmu disini, temanku.."
         android:textSize="16sp"
         android:textColor="#E0E0E0"
         app:layout_constraintTop_toBottomOf="@id/tv_title"
@@ -58,10 +58,10 @@
         android:layout_marginStart="32dp"
         android:layout_marginEnd="32dp"
         android:layout_marginBottom="80dp"
-        android:text="Masuk dengan Google"
+        android:text="Login"
         android:textSize="16sp"
         android:textColor="@android:color/white"
-        android:backgroundTint="#4285F4"
+        android:backgroundTint="#6C48C5"
         app:cornerRadius="50dp"
         app:icon="@drawable/ic_google"
         app:iconGravity="textStart"

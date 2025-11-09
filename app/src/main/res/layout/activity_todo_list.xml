@@ -5,7 +5,7 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#F6F8FB"
+    android:background="#000000"
     tools:context=".TodoListActivity">
 
     <!-- Judul Halaman -->
@@ -13,10 +13,10 @@
         android:id="@+id/titlePage"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Ceritamu, Kawan!"
+        android:text="Gimana harimu?"
         android:textSize="22sp"
         android:textStyle="bold"
-        android:textColor="#1E1E1E"
+        android:textColor="#F9F8F6"
         android:layout_marginTop="24dp"
         android:layout_marginStart="24dp"
         android:layout_marginBottom="8dp" />
@@ -49,7 +49,7 @@
         android:layout_width="60dp"
         android:layout_height="60dp"
         android:layout_centerInParent="true"
-        android:indeterminateTint="#0D6EFD"
+        android:indeterminateTint="#6C48C5"
         android:visibility="gone" />
 
     <!-- Tombol Tambah (Floating Action Button) -->
@@ -61,7 +61,7 @@
         android:layout_alignParentBottom="true"
         android:layout_margin="24dp"
         android:contentDescription="Tambah Todo"
-        app:backgroundTint="#0D6EFD"
+        app:backgroundTint="#2E073F"
         app:tint="@android:color/white"
         app:fabSize="normal"
         app:elevation="8dp"

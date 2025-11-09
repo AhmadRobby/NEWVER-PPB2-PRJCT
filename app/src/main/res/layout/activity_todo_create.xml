@@ -6,14 +6,14 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#F5F7FA"
+    android:background="#000000"
     tools:context=".TodoCreateActivity">
 
     <!-- App Bar -->
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:backgroundTint="#0D6EFD"
+        android:backgroundTint="#6C48C5"
         android:elevation="4dp">
 
         <com.google.android.material.appbar.MaterialToolbar
@@ -42,9 +42,9 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Isi detail tugas di bawah ini"
+                android:text="Wihh, ada cerita apa nih?"
                 android:textSize="16sp"
-                android:textColor="#212121"
+                android:textColor="#F9F8F6"
                 android:layout_marginBottom="16dp"/>
 
             <!-- Input Judul -->
@@ -54,15 +54,15 @@
                 android:layout_height="wrap_content"
                 android:hint="Judul"
                 app:startIconDrawable="@drawable/ic_title"
-                app:startIconTint="#0D6EFD"
-                app:boxStrokeColor="#0D6EFD"
-                app:hintTextColor="@color/black">
+                app:startIconTint="#6C48C5"
+                app:boxStrokeColor="#6C48C5"
+                app:hintTextColor="#F9F8F6">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/title"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textColor="#212121"
+                    android:textColor="#F9F8F6"
                     android:textColorHint="#757575"
                     android:inputType="textCapSentences"/>
             </com.google.android.material.textfield.TextInputLayout>
@@ -75,15 +75,15 @@
                 android:layout_marginTop="16dp"
                 android:hint="Deskripsi"
                 app:startIconDrawable="@drawable/ic_description"
-                app:startIconTint="#0D6EFD"
-                app:boxStrokeColor="#0D6EFD"
-                app:hintTextColor="@color/black">
+                app:startIconTint="#6C48C5"
+                app:boxStrokeColor="#6C48C5"
+                app:hintTextColor="#F9F8F6">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/description"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textColor="#212121"
+                    android:textColor="#F9F8F6"
                     android:textColorHint="#757575"
                     android:inputType="textMultiLine|textCapSentences"
                     android:minLines="4"/>
@@ -98,7 +98,7 @@
                 android:text="Simpan Tugas"
                 android:textSize="16sp"
                 android:textStyle="bold"
-                android:backgroundTint="#0D6EFD"
+                android:backgroundTint="#6C48C5"
                 android:textColor="@android:color/white"
                 app:cornerRadius="12dp"
                 app:icon="@drawable/ic_save"

@@ -11,11 +11,15 @@ import androidx.lifecycle.lifecycleScope
 import com.example.newver.databinding.ActivityTodoCreateBinding
 import com.example.newver.entity.Todo
 import com.example.newver.usecase.TodoUseCase
+import com.google.firebase.auth.FirebaseAuth // 1. Jangan lupa import ini
 import kotlinx.coroutines.launch
 
 class TodoCreateActivity : AppCompatActivity() {
     private lateinit var binding: ActivityTodoCreateBinding
-    private lateinit var  todoUseCase: TodoUseCase
+    private lateinit var todoUseCase: TodoUseCase
+
+    // Tambahkan variabel Auth
+    private lateinit var auth: FirebaseAuth
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,34 +34,57 @@ class TodoCreateActivity : AppCompatActivity() {
             insets
         }
 
+        // Inisialisasi
+        auth = FirebaseAuth.getInstance()
         todoUseCase = TodoUseCase()
+
         registerEvents()
     }
 
     fun registerEvents(){
         binding.tombolTambah.setOnClickListener{
-            saveDatatoFirestore()
+            // Validasi input dulu biar gak nyimpen data kosong
+            if (binding.title.text.isNullOrEmpty()) {
+                Toast.makeText(this, "Judul harus diisi ya!", Toast.LENGTH_SHORT).show()
+            } else {
+                saveDatatoFirestore()
+            }
         }
     }
 
     private fun saveDatatoFirestore(){
+        // 2. Cek User Login
+        val currentUser = auth.currentUser
+
+        if (currentUser == null) {
+            Toast.makeText(this, "Waduh, sesi login habis. Login ulang yuk!", Toast.LENGTH_SHORT).show()
+            return
+        }
+
+        // 3. Masukkan UID ke dalam object Todo
         val todo = Todo(
             id = "",
             title = binding.title.text.toString(),
-            description = binding.description.text.toString()
+            description = binding.description.text.toString(),
+            createdTime = System.currentTimeMillis(), // Biar tau kapan dibuat
+            userId = currentUser.uid // <--- INI KUNCINYA
         )
 
         lifecycleScope.launch {
+            // Karena pakai UseCase, pastikan UseCase-mu menerima object Todo ini
             todoUseCase.createTodo(todo)
 
-            Toast.makeText(this@TodoCreateActivity, "Tersimpan, Makasih udah cerita ya!", Toast.LENGTH_LONG)
+            // Tadi kodemu lupa .show() di akhir Toast, ini saya perbaiki
+            Toast.makeText(this@TodoCreateActivity, "Tersimpan, Makasih udah cerita ya!", Toast.LENGTH_LONG).show()
 
             toTodoListActivity()
         }
     }
 
     private fun toTodoListActivity(){
-        val intent = Intent(this,TodoListActivity::class.java)
+        val intent = Intent(this, TodoListActivity::class.java)
+        // Tambahkan flag biar gak bisa di-back ke halaman create setelah simpan
+        intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
         startActivity(intent)
         finish()
     }

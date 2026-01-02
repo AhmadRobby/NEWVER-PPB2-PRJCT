@@ -13,16 +13,18 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.newver.adapter.TodoAdapter
-import com.example.newver.api.RetrofitClient // <--- JANGAN LUPA IMPORT INI
+import com.example.newver.api.RetrofitClient
 import com.example.newver.databinding.ActivityTodoListBinding
 import com.example.newver.entity.Todo
 import com.example.newver.usecase.TodoUseCase
+import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.launch
 
 class TodoListActivity : AppCompatActivity() {
     private lateinit var binding: ActivityTodoListBinding
     private lateinit var todoUseCase: TodoUseCase
     private lateinit var todoAdapter: TodoAdapter
+    private lateinit var auth: FirebaseAuth
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,16 +39,22 @@ class TodoListActivity : AppCompatActivity() {
             insets
         }
 
+        // Inisialisasi Auth & UseCase
+        auth = FirebaseAuth.getInstance()
         todoUseCase = TodoUseCase()
+
+        // Cek Login: Kalau belum login, lempar ke MainActivity (Login)
+        if (auth.currentUser == null) {
+            goToLogin()
+            return
+        }
 
         setupRecyclerView()
         registerEvents()
 
-        // --- TAMBAHAN BARU: Panggil API Quote ---
+        // Logic Quote
         fetchQuote()
-        // Tambahkan Event Klik pada Text Quote
         binding.tvQuote.setOnClickListener {
-            // Panggil ulang fungsinya saat diklik
             fetchQuote()
             Toast.makeText(this, "Mengambil quote baru...", Toast.LENGTH_SHORT).show()
         }
@@ -54,46 +62,68 @@ class TodoListActivity : AppCompatActivity() {
 
     override fun onStart() {
         super.onStart()
-        initializeData() // Load data Todo dari Firebase
+        // Cek lagi untuk keamanan ganda, ambil data user
+        if (auth.currentUser != null) {
+            initializeData()
+        }
     }
 
-    // --- FUNGSI BARU: Logic Ambil Quote dari API ---
+    private fun registerEvents() {
+        // 1. Tombol Tambah
+        binding.TombolCreateTodo.setOnClickListener {
+            startActivity(Intent(this, TodoCreateActivity::class.java))
+        }
+
+        // 2. TOMBOL LOGOUT (BARU)
+        binding.btnLogout.setOnClickListener {
+            // Tampilkan dialog konfirmasi biar gak kepencet
+            val builder = AlertDialog.Builder(this)
+            builder.setTitle("Keluar Akun")
+            builder.setMessage("Yakin mau logout dan kembali ke halaman login?")
+            builder.setPositiveButton("Ya") { _, _ ->
+                logoutUser()
+            }
+            builder.setNegativeButton("Enggak") { dialog, _ ->
+                dialog.dismiss()
+            }
+            builder.show()
+        }
+    }
+
+    // Fungsi Logout
+    private fun logoutUser() {
+        auth.signOut() // Hapus sesi Firebase
+        goToLogin() // Pindah halaman
+    }
+
+    private fun goToLogin() {
+        val intent = Intent(this, MainActivity::class.java)
+        // Hapus history activity agar tombol Back tidak mengembalikan user ke sini
+        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        startActivity(intent)
+        finish()
+    }
+
     private fun fetchQuote() {
         lifecycleScope.launch {
             try {
-                // Set text loading dulu biar user tau
-                // Pastikan di XML ID-nya benar: tvQuote
                 binding.tvQuote.text = "Mencari inspirasi..."
-
-                // Panggil Retrofit
                 val response = RetrofitClient.instance.getRandomQuote()
-
                 if (response.isSuccessful) {
                     val data = response.body()
-                    // Format text: "Isi Quote" - Penulis
                     val quoteText = "\"${data?.quote}\"\n- ${data?.author}"
-
                     binding.tvQuote.text = quoteText
                 } else {
                     binding.tvQuote.text = "Gagal memuat motivasi hari ini."
                 }
             } catch (e: Exception) {
-                // Kalau internet mati atau error lain
                 binding.tvQuote.text = "Tetap semangat menjalani hari! (Offline)"
                 Log.e("API_ERROR", "Error fetch quote: ${e.message}")
             }
         }
     }
 
-    private fun registerEvents() {
-        binding.TombolCreateTodo.setOnClickListener {
-            startActivity(Intent(this, TodoCreateActivity::class.java))
-        }
-    }
-
     private fun setupRecyclerView() {
-        // Pastikan 'container' di XML kamu adalah RecyclerView
-        // Dan pastikan kamu sudah import TodoAdapter dan TodoItemEvents dengan benar
         todoAdapter = TodoAdapter(mutableListOf(), object : TodoAdapter.TodoItemEvents {
             override fun onEdit(todo: Todo) {
                 val intent = Intent(this@TodoListActivity, TodoEditActivity::class.java)
@@ -106,14 +136,12 @@ class TodoListActivity : AppCompatActivity() {
             }
         })
 
-        // Ganti 'container' sesuai ID RecyclerView di XML kamu (misal: rvTodoList atau tetap container)
         binding.container.apply {
             adapter = todoAdapter
             layoutManager = LinearLayoutManager(this@TodoListActivity)
         }
     }
 
-    // Saya rapikan sedikit logic delete biar onSetupRecyclerView tidak terlalu panjang
     private fun showDeleteConfirmation(todo: Todo) {
         val builder = AlertDialog.Builder(this)
         builder.setTitle("Menghapus")
@@ -140,19 +168,26 @@ class TodoListActivity : AppCompatActivity() {
 
     private fun initializeData() {
         lifecycleScope.launch {
-            // Pastikan ID 'container' dan 'uiLoading' ada di XML kamu
             binding.container.visibility = View.GONE
             binding.uiLoading.visibility = View.VISIBLE
 
+            val userId = auth.currentUser?.uid
+
+            if (userId == null) {
+                displayMessage("User tidak ditemukan")
+                return@launch
+            }
+
             try {
-                val todoList = todoUseCase.getTodo()
+                // Mengambil data spesifik user
+                val todoList = todoUseCase.getTodo(userId)
                 Log.d("TodoList", "Data: $todoList")
 
                 binding.uiLoading.visibility = View.GONE
                 binding.container.visibility = View.VISIBLE
                 todoAdapter.updateData(todoList)
             } catch (e: Exception) {
-                binding.uiLoading.visibility = View.GONE // Sembunyikan loading kalau error
+                binding.uiLoading.visibility = View.GONE
                 Toast.makeText(this@TodoListActivity, e.message, Toast.LENGTH_SHORT).show()
             }
         }

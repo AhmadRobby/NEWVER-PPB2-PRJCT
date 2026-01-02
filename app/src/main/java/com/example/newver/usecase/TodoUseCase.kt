@@ -7,11 +7,13 @@ import kotlinx.coroutines.tasks.await
 
 class TodoUseCase {
     private val db = Firebase.firestore
-    private val collectionName = "todo" // pastikan konsisten huruf kecil semua
+    private val collectionName = "todos" // Saya sarankan pakai "todos" (jamak) biar standar, tapi "todo" juga boleh asal konsisten sama yang lain.
 
-    suspend fun getTodo(): List<Todo> {
+    // 1. UBAH DI SINI: Tambahkan parameter userId
+    suspend fun getTodo(userId: String): List<Todo> {
         return try {
             val data = db.collection(collectionName)
+                .whereEqualTo("userId", userId) // <--- FILTER USER ID
                 .get()
                 .await()
 
@@ -20,7 +22,9 @@ class TodoUseCase {
                     Todo(
                         id = it.id,
                         title = it.getString("title").orEmpty(),
-                        description = it.getString("description").orEmpty()
+                        description = it.getString("description").orEmpty(),
+                        // Jangan lupa ambil userId juga dari database
+                        userId = it.getString("userId").orEmpty()
                     )
                 }
             } else {
@@ -31,7 +35,7 @@ class TodoUseCase {
         }
     }
 
-    suspend fun getTodo(id: String): Todo? {
+    suspend fun getTodoById(id: String): Todo? {
         val data = db.collection(collectionName)
             .document(id)
             .get()
@@ -41,7 +45,8 @@ class TodoUseCase {
             Todo(
                 id = data.id,
                 title = data.getString("title").orEmpty(),
-                description = data.getString("description").orEmpty()
+                description = data.getString("description").orEmpty(),
+                userId = data.getString("userId").orEmpty()
             )
         } else {
             null
@@ -49,9 +54,12 @@ class TodoUseCase {
     }
 
     suspend fun createTodo(todo: Todo): Todo {
+        // 2. UBAH DI SINI: Masukkan userId ke payload simpan
         val payload = hashMapOf(
             "title" to todo.title,
-            "description" to todo.description
+            "description" to todo.description,
+            "userId" to todo.userId, // <--- PENTING: Penanda Pemilik
+            "createdTime" to System.currentTimeMillis() // Opsional: biar bisa diurutkan
         )
 
         return try {
@@ -76,9 +84,14 @@ class TodoUseCase {
     }
 
     suspend fun updateTodo(todo: Todo) {
+        // 3. UBAH DI SINI: Masukkan userId lagi
+        // Kenapa? Karena .set() akan MENIMPA seluruh dokumen.
+        // Kalau userId tidak dimasukkan di sini, nanti field userId di database akan hilang.
         val payload = hashMapOf(
             "title" to todo.title,
-            "description" to todo.description
+            "description" to todo.description,
+            "userId" to todo.userId, // <--- PENTING
+            "createdTime" to todo.createdTime
         )
 
         try {

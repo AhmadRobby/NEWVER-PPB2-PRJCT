@@ -18,6 +18,9 @@ class TodoEditActivity : AppCompatActivity() {
     private lateinit var todoUseCase: TodoUseCase
     private lateinit var todoItemId: String
 
+    // Simpan userId pemilik asli biar tidak hilang saat update
+    private var currentUserId: String = ""
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -25,7 +28,6 @@ class TodoEditActivity : AppCompatActivity() {
         binding = ActivityTodoEditBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        // biar layout tidak ketimpa status bar
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
@@ -53,11 +55,18 @@ class TodoEditActivity : AppCompatActivity() {
                 return@setOnClickListener
             }
 
+            // Validasi keamanan: Jangan sampai update kalau data aslinya belum dimuat
+            if (currentUserId.isEmpty()) {
+                displayMessage("Gagal memuat profil pemilik data")
+                return@setOnClickListener
+            }
+
             lifecycleScope.launch {
                 val payload = Todo(
                     id = todoItemId,
                     title = title,
-                    description = description
+                    description = description,
+                    userId = currentUserId // <--- PENTING: Masukkan lagi ID pemiliknya!
                 )
 
                 try {
@@ -73,20 +82,28 @@ class TodoEditActivity : AppCompatActivity() {
 
     private fun loadTodo() {
         lifecycleScope.launch {
-            val todo = todoUseCase.getTodo(todoItemId)
+            // PERBAIKAN DI SINI:
+            // Pakai 'getTodoById' (ambil satu), BUKAN 'getTodo' (ambil banyak)
+            val todo = todoUseCase.getTodoById(todoItemId)
+
             if (todo == null) {
-                displayMessage("Data yang akan diedit tidak tersedia di server")
+                displayMessage("Data tidak ditemukan atau error")
                 backToList()
                 return@launch
             }
 
+            // Simpan userId yang didapat dari database ke variabel sementara
+            currentUserId = todo.userId
+
+            // Sekarang todo.title pasti aman karena todo adalah Single Object
             binding.title.setText(todo.title)
             binding.description.setText(todo.description)
         }
     }
 
     private fun backToList() {
-        val intent = Intent(this, TodoListActivity::class.java)
+        val intent = Intent(this, TodoListActivity::class.java) // Pastikan nama Activity list kamu benar
+        intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
         startActivity(intent)
         finish()
     }

@@ -8,30 +8,41 @@
     android:background="#000000"
     tools:context=".TodoListActivity">
 
-    <!-- Judul Halaman -->
+    <TextView
+        android:id="@+id/tvQuote"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:background="#2E073F"
+        android:gravity="center"
+        android:padding="16dp"
+        android:text="Mencari inspirasi..."
+        android:textColor="#FFFFFF"
+        android:textSize="14sp"
+        android:textStyle="italic" />
+
     <TextView
         android:id="@+id/titlePage"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Gimana harimu?"
-        android:textSize="22sp"
-        android:textStyle="bold"
-        android:textColor="#F9F8F6"
+        android:layout_below="@id/tvQuote"
         android:layout_marginTop="24dp"
         android:layout_marginStart="24dp"
-        android:layout_marginBottom="8dp" />
+        android:layout_marginBottom="8dp"
+        android:text="Gimana harimu?"
+        android:textColor="#F9F8F6"
+        android:textSize="22sp"
+        android:textStyle="bold" />
 
-    <!-- Garis pembatas -->
     <View
         android:id="@+id/divider"
         android:layout_below="@id/titlePage"
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="#DADCE0"
         android:layout_marginHorizontal="20dp"
-        android:layout_marginBottom="8dp" />
+        android:layout_marginBottom="8dp"
+        android:background="#DADCE0" />
 
-    <!-- Daftar Todo -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/container"
         android:layout_below="@id/divider"
@@ -43,16 +54,14 @@
         android:paddingBottom="80dp"
         tools:listitem="@layout/item_todo" />
 
-    <!-- Loading Progress -->
     <ProgressBar
-        android:id="@+id/ui_loading"
+        android:id="@+id/uiLoading"
         android:layout_width="60dp"
         android:layout_height="60dp"
         android:layout_centerInParent="true"
         android:indeterminateTint="#6C48C5"
         android:visibility="gone" />
 
-    <!-- Tombol Tambah (Floating Action Button) -->
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/TombolCreateTodo"
         android:layout_width="wrap_content"
@@ -62,9 +71,9 @@
         android:layout_margin="24dp"
         android:contentDescription="Tambah Todo"
         app:backgroundTint="#2E073F"
-        app:tint="@android:color/white"
-        app:fabSize="normal"
         app:elevation="8dp"
-        app:srcCompat="@android:drawable/ic_input_add" />
+        app:fabSize="normal"
+        app:srcCompat="@android:drawable/ic_input_add"
+        app:tint="@android:color/white" />
 
 </RelativeLayout>
